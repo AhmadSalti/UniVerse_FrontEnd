@@ -4,4 +4,7 @@ class ApiConfig {
 
   static const String LOGIN_ENDPOINT = '$BASE_URL/users/login';
   static const String BOT_ENDPOINT = '$BOT_URL/webhooks/rest/webhook/';
+
+  static const String STUDENT_INFO_ENDPOINT =
+      '$BASE_URL/students/getStudentById';
 }

@@ -94,6 +94,8 @@ app.*.map.json
 # API Documentation
 *.postman_collection.json
 Login.postman_collection.json
+2
+3
 
 # Configuration files
 lib/config/api_config.dart

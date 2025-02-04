@@ -37,8 +37,12 @@ class top_container extends StatelessWidget {
                       padding: EdgeInsets.all(8.0),
                       child: CircleAvatar(
                         radius: 22,
-                        backgroundImage: AssetImage('icons/icon.png'),
                         backgroundColor: Colors.white,
+                        child: const Icon(
+                          Icons.person,
+                          size: 22,
+                          color: Color(0xFFC0B6AC),
+                        ),
                       ),
                     ),
                     Text(

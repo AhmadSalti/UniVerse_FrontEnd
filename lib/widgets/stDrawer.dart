@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import '../screens/login_page.dart';
+import '../screens/personal_info_page.dart';
+import '../screens/academic_info_page.dart';
+import '../screens/announcements_page.dart';
+import '../screens/settings_page.dart';
+import '../screens/schedule_page.dart';
 
 class StDrawer extends StatefulWidget {
   const StDrawer({super.key});
@@ -78,7 +83,12 @@ class _StDrawerState extends State<StDrawer> {
                         ),
                       ),
                       onTap: () {
-                        // Handle tap
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PersonalInfoPage(),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
@@ -103,7 +113,12 @@ class _StDrawerState extends State<StDrawer> {
                         ),
                       ),
                       onTap: () {
-                        // Handle tap
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AcademicInfoPage(),
+                          ),
+                        );
                       },
                     ),
                   ]),
@@ -150,7 +165,12 @@ class _StDrawerState extends State<StDrawer> {
                         ),
                       ),
                       onTap: () {
-                        // Handle tap
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SchedulePage(),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
@@ -408,7 +428,12 @@ class _StDrawerState extends State<StDrawer> {
                   ),
                 ),
                 onTap: () {
-                  // Handle tap
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AnnouncementsPage(),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -421,7 +446,12 @@ class _StDrawerState extends State<StDrawer> {
                   ),
                 ),
                 onTap: () {
-                  // Handle tap
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
+                    ),
+                  );
                 },
               ),
               ListTile(
