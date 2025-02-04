@@ -90,3 +90,7 @@ app.*.map.json
 # Hive database files
 *.hive
 *.lock
+
+# API Documentation
+*.postman_collection.json
+Login.postman_collection.json
