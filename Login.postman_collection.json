@@ -1,0 +1,48 @@
+{
+	"info": {
+		"_postman_id": "cf55de79-cd47-4062-99b5-43a1245cc21f",
+		"name": "Login",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37384552"
+	},
+	"item": [
+		{
+			"name": "تسجيل حساب لطالب",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "تسجيل الدخول واسترجاع الtoken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"ibramsssss@gmail.com\",\r\n    \"password\":\"1234\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://universe-khu4.onrender.com/users/login",
+					"protocol": "https",
+					"host": [
+						"universe-khu4",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
