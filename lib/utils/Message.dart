@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'cache_helper.dart';
+import '../config/api_config.dart';
 
 class Message {
   final String content;
@@ -30,7 +31,7 @@ class Message {
     try {
       final response = await http
           .post(
-        Uri.parse('http://127.0.0.1:5005/webhooks/rest/webhook/'),
+        Uri.parse(ApiConfig.BOT_ENDPOINT),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "message": message,

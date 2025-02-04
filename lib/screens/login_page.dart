@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../main.dart';
 import '../utils/cache_helper.dart';
+import '../config/api_config.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://universe-khu4.onrender.com/users/login'),
+        Uri.parse(ApiConfig.LOGIN_ENDPOINT),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': _studentIdController.text,
