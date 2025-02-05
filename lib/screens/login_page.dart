@@ -36,23 +36,19 @@ class _LoginPageState extends State<LoginPage> {
         final responseData = jsonDecode(response.body);
         final token = responseData['token'];
 
-        // Decode the token (it's in base64)
         final parts = token.split('.');
         if (parts.length != 3) {
           throw Exception('Invalid token');
         }
 
-        // Decode the payload (middle part of the token)
         final payload = parts[1];
         final normalized = base64Url.normalize(payload);
         final payloadData = utf8.decode(base64Url.decode(normalized));
         final payloadMap = jsonDecode(payloadData);
 
-        // Get id from payload and convert to string with padding
         final id = payloadMap['id']?.toString() ?? "000000000";
         final studentId = id.padLeft(9, '0');
 
-        // Save to cache
         await CacheHelper.saveToken(token);
         await CacheHelper.saveStudentId(studentId);
 
@@ -67,7 +63,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       } else {
-        // Login failed
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
               content: Text('فشل تسجيل الدخول. الرجاء التحقق من البيانات')),

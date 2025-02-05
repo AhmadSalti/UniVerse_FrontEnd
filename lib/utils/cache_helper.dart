@@ -10,7 +10,6 @@ class CacheHelper {
     _box = await Hive.openBox('appCache');
   }
 
-  // Token management
   static Future<void> saveToken(String token) async {
     await _box.put('token', token);
   }
@@ -19,7 +18,6 @@ class CacheHelper {
     return _box.get('token');
   }
 
-  // Student ID management
   static Future<void> saveStudentId(String studentId) async {
     await _box.put('studentId', studentId);
   }
@@ -28,7 +26,6 @@ class CacheHelper {
     return _box.get('studentId');
   }
 
-  // Chat messages management
   static Future<void> saveMessages(
       List<Message> messages, String studentId) async {
     final messagesJson = messages.map((msg) => msg.toJson()).toList();
@@ -43,7 +40,6 @@ class CacheHelper {
     return messagesList.map((msg) => Message.fromJson(msg)).toList();
   }
 
-  // Clear all data
   static Future<void> clearAll() async {
     await _box.clear();
   }
