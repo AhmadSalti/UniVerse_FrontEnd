@@ -19,10 +19,8 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize messages
-    setState(() {}); // This will trigger a rebuild with loaded messages
+    setState(() {});
 
-    // Refresh date headers every minute
     _dateRefreshTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
       if (mounted) {
         setState(() {});
@@ -60,7 +58,6 @@ class _ChatScreenState extends State<ChatScreen> {
     _messageController.clear();
     _scrollToBottom();
 
-    // Get bot response
     final botResponse = await Message.getBotResponse(text);
 
     setState(() {
