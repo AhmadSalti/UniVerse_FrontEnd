@@ -27,16 +27,28 @@ class Message {
         isUser: json['isUser'],
       );
 
-  static Future<String> getBotResponse(String message) async {
+  static Future<String> getBotResponse(String message, String token) async {
+    final parts = token.split('.');
+    if (parts.length != 3) throw Exception('Invalid token');
+
+    final payload = parts[1];
+    final normalized = base64Url.normalize(payload);
+    final payloadData = utf8.decode(base64Url.decode(normalized));
+    final payloadMap = jsonDecode(payloadData);
+    final id = payloadMap['id']?.toString() ?? "000000000";
+    final studentId = id.padLeft(9, '0');
+
     try {
+      final requestBody = {
+        'message': message,
+        'metadata': {'student_id': studentId}
+      };
+
       final response = await http
           .post(
         Uri.parse(ApiConfig.BOT_ENDPOINT),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "message": message,
-          "sender": "flutter_user",
-        }),
+        body: jsonEncode(requestBody),
       )
           .timeout(
         const Duration(seconds: 10),
@@ -73,29 +85,44 @@ class Message {
 
 class ChatState {
   static final ChatState _instance = ChatState._internal();
-  List<Message> messages = [];
-  String? _studentId;
+  Map<String, List<Message>> _userMessages = {};
+  String? _currentUserId;
 
   factory ChatState() {
     return _instance;
   }
 
   void initializeForUser(String studentId) {
-    _studentId = studentId;
-    messages = CacheHelper.getMessages(studentId);
+    _currentUserId = studentId;
+    if (!_userMessages.containsKey(studentId)) {
+      _userMessages[studentId] = CacheHelper.getMessages(studentId);
+    }
   }
 
-  ChatState._internal();
+  List<Message> get messages =>
+      _currentUserId != null ? _userMessages[_currentUserId] ?? [] : [];
 
   void addMessage(Message message) {
-    if (_studentId == null) return;
-    messages.add(message);
-    CacheHelper.saveMessages(messages, _studentId!);
+    if (_currentUserId == null) return;
+
+    if (!_userMessages.containsKey(_currentUserId)) {
+      _userMessages[_currentUserId!] = [];
+    }
+
+    _userMessages[_currentUserId]!.add(message);
+    CacheHelper.saveMessages(_userMessages[_currentUserId]!, _currentUserId!);
   }
 
   void clearMessages() {
-    if (_studentId == null) return;
-    messages.clear();
-    CacheHelper.saveMessages(messages, _studentId!);
+    if (_currentUserId == null) return;
+    _userMessages.remove(_currentUserId);
+    CacheHelper.saveMessages([], _currentUserId!);
   }
+
+  void clearAllMessages() {
+    _userMessages.clear();
+    _currentUserId = null;
+  }
+
+  ChatState._internal();
 }

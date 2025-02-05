@@ -40,7 +40,12 @@ class CacheHelper {
     return messagesList.map((msg) => Message.fromJson(msg)).toList();
   }
 
-  static Future<void> clearAll() async {
+  static Future<void> clearUserData() async {
+    await _box.delete('token');
+    await _box.delete('studentId');
+  }
+
+  static Future<void> clearAllData() async {
     await _box.clear();
   }
 }

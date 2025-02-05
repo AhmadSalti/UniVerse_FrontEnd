@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '/screens/second/local_widgets/chat_screen.dart';
+import '/utils/cache_helper.dart';
 
 class botButton extends StatefulWidget {
   const botButton({super.key});
@@ -10,9 +11,10 @@ class botButton extends StatefulWidget {
 
 class _botButtonState extends State<botButton> {
   void _openChat() {
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
-        builder: (context) => const ChatScreen(),
+        builder: (context) => ChatScreen(token: CacheHelper.getToken() ?? ''),
       ),
     );
   }
@@ -23,7 +25,7 @@ class _botButtonState extends State<botButton> {
       width: 153,
       height: 153,
       child: FloatingActionButton(
-        onPressed: _openChat, // Changed from _toggleChat to _openChat
+        onPressed: _openChat,
         backgroundColor: Colors.transparent,
         elevation: 0,
         shape: const CircleBorder(),

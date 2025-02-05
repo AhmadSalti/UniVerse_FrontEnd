@@ -7,6 +7,7 @@ import '../screens/settings_page.dart';
 import '../screens/schedule_page.dart';
 import '../screens/registration_rules_page.dart';
 import '../screens/subject_registration_page.dart';
+import '../utils/cache_helper.dart';
 
 class StDrawer extends StatefulWidget {
   const StDrawer({super.key});
@@ -467,28 +468,34 @@ class _StDrawerState extends State<StDrawer> {
                   );
                 },
               ),
-              ListTile(
-                trailing: Icon(Icons.logout),
-                title: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Text(
-                    'تسجيل الخروج',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                    (route) => false,
-                  );
-                },
-              ),
+              _buildLogoutTile(),
               // ... more list tiles
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLogoutTile() {
+    return ListTile(
+      trailing: const Icon(Icons.logout),
+      title: const Directionality(
+        textDirection: TextDirection.rtl,
+        child: Text('تسجيل الخروج', style: TextStyle(fontSize: 12)),
+      ),
+      onTap: () async {
+        // Clear only user data, keep chat history
+        await CacheHelper.clearUserData();
+
+        if (mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+            (route) => false,
+          );
+        }
+      },
     );
   }
 }

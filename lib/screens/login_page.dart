@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         Uri.parse(ApiConfig.LOGIN_ENDPOINT),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'email': _studentIdController.text,
+          'id': _studentIdController.text,
           'password': _passwordController.text,
         }),
       );

@@ -3,7 +3,8 @@ import '../../../utils/Message.dart';
 import 'dart:async';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final String token;
+  const ChatScreen({super.key, required this.token});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -58,7 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _messageController.clear();
     _scrollToBottom();
 
-    final botResponse = await Message.getBotResponse(text);
+    final botResponse = await Message.getBotResponse(text, widget.token);
 
     setState(() {
       _isTyping = false;
