@@ -48,4 +48,20 @@ class CacheHelper {
   static Future<void> clearAllData() async {
     await _box.clear();
   }
+
+  static Future<void> saveEmail(String email) async {
+    await _box.put('email', email);
+  }
+
+  static String? getEmail() {
+    return _box.get('email');
+  }
+
+  static Future<void> saveRole(String role) async {
+    await _box.put('role', role);
+  }
+
+  static String? getRole() {
+    return _box.get('role');
+  }
 }

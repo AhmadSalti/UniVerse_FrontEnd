@@ -110,51 +110,11 @@ class _AcademicInfoPageState extends State<AcademicInfoPage> {
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: [
-                        _buildStatusCard(),
-                        const SizedBox(height: 16),
-                        _buildDetailsCard(),
-                      ],
-                    ),
+                    child: _buildDetailsCard(),
                   ),
                 ],
               ),
             ),
-    );
-  }
-
-  Widget _buildStatusCard() {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            const Text(
-              'الحالة الأكاديمية',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            _buildInfoRow(
-              'المستوى الدراسي',
-              _academicInfo['academicLevel'] ?? 'غير متوفر',
-              Icons.school,
-            ),
-            const Divider(),
-            _buildInfoRow(
-              'الحالة',
-              _academicInfo['status'] ?? 'غير متوفر',
-              Icons.info_outline,
-            ),
-          ],
-        ),
-      ),
     );
   }
 

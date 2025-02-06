@@ -161,6 +161,14 @@ class _ChatScreenState extends State<ChatScreen> {
                         icon: const Icon(Icons.more_horiz, color: Colors.black),
                         itemBuilder: (context) => [
                           const PopupMenuItem(
+                            value: 'clear',
+                            child: Text(
+                              'مسح المحادثة',
+                              style: TextStyle(fontSize: 14),
+                              textDirection: TextDirection.rtl,
+                            ),
+                          ),
+                          const PopupMenuItem(
                             value: 'rate',
                             child: Text(
                               'تقييم المجيب',
@@ -179,6 +187,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         ],
                         onSelected: (value) {
                           switch (value) {
+                            case 'clear':
+                              setState(() {
+                                _chatState.clearMessages();
+                              });
+                              break;
                             case 'rate':
                               // Handle rating
                               break;

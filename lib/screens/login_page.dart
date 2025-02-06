@@ -5,6 +5,7 @@ import 'dart:convert';
 import '../main.dart';
 import '../utils/cache_helper.dart';
 import '../config/api_config.dart';
+import 'admin_home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,7 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _studentIdController = TextEditingController();
+  final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
 
@@ -23,14 +24,29 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _isLoading = true);
 
     try {
+      final loginValue = _loginController.text;
+      final isEmail = loginValue.contains('@');
+
+      final Map<String, String> requestBody = isEmail
+          ? {
+              'email': loginValue,
+              'password': _passwordController.text,
+            }
+          : {
+              'id': loginValue,
+              'password': _passwordController.text,
+            };
+
       final response = await http.post(
-        Uri.parse(ApiConfig.LOGIN_ENDPOINT),
+        Uri.parse(isEmail
+            ? ApiConfig.ADMIN_LOGIN_ENDPOINT
+            : ApiConfig.LOGIN_ENDPOINT),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'id': _studentIdController.text,
-          'password': _passwordController.text,
-        }),
+        body: jsonEncode(requestBody),
       );
+
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}");
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
@@ -46,26 +62,46 @@ class _LoginPageState extends State<LoginPage> {
         final payloadData = utf8.decode(base64Url.decode(normalized));
         final payloadMap = jsonDecode(payloadData);
 
-        final id = payloadMap['id']?.toString() ?? "000000000";
-        final studentId = id.padLeft(9, '0');
+        final role = payloadMap['role']?.toString();
+        if (role == 'admin') {
+          final email = payloadMap['email']?.toString() ?? "";
+          await CacheHelper.saveToken(token);
+          await CacheHelper.saveEmail(email);
+          await CacheHelper.saveRole('admin');
 
-        await CacheHelper.saveToken(token);
-        await CacheHelper.saveStudentId(studentId);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyHomePage(
-              title: 'Home Page',
-              studentId: studentId,
-              token: token,
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AdminHomePage(
+                title: 'Admin Dashboard',
+                email: email,
+                token: token,
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          final id = payloadMap['id']?.toString() ?? "000000000";
+          final studentId = id.padLeft(9, '0');
+          await CacheHelper.saveToken(token);
+          await CacheHelper.saveStudentId(studentId);
+          await CacheHelper.saveRole('student');
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MyHomePage(
+                title: 'Home Page',
+                studentId: studentId,
+                token: token,
+              ),
+            ),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-              content: Text('فشل تسجيل الدخول. الرجاء التحقق من البيانات')),
+            content: Text('فشل تسجيل الدخول. الرجاء التحقق من البيانات'),
+          ),
         );
       }
     } catch (e) {
@@ -128,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                                 const SizedBox(height: 20),
                                 TextFormField(
                                   textAlign: TextAlign.right,
-                                  controller: _studentIdController,
+                                  controller: _loginController,
                                   decoration: const InputDecoration(
                                     labelText: 'رقم الطالب',
                                     alignLabelWithHint: true,
@@ -195,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _studentIdController.dispose();
+    _loginController.dispose();
     _passwordController.dispose();
     super.dispose();
   }

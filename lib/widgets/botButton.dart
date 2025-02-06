@@ -11,10 +11,17 @@ class botButton extends StatefulWidget {
 
 class _botButtonState extends State<botButton> {
   void _openChat() {
+    final token = CacheHelper.getToken();
+    print("BotButton: Opening chat"); // Debug
+    print("BotButton: Token from cache: $token"); // Debug
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChatScreen(token: CacheHelper.getToken() ?? ''),
+        builder: (context) {
+          print("BotButton: Creating ChatScreen with token: $token"); // Debug
+          return ChatScreen(token: token ?? '');
+        },
       ),
     );
   }
